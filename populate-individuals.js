@@ -32,7 +32,8 @@ function generateName() {
     return `${firstName} ${lastName}`;
 }
 
-// Clear existing individuals
+// Clear existing data in the correct order
+db.prepare('DELETE FROM scores').run();
 db.prepare('DELETE FROM individuals').run();
 
 // Prepare the insert statement

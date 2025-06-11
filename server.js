@@ -32,6 +32,17 @@ app.get('/api/individuals', (req, res) => {
     }
 });
 
+// API endpoint to get rankings
+app.get('/api/rankings', (req, res) => {
+    try {
+        const rankings = getRankings();
+        res.json(rankings);
+    } catch (error) {
+        console.error('Erreur lors de la récupération du classement:', error);
+        res.status(500).json({ error: 'Erreur serveur' });
+    }
+});
+
 io.on('connection', (socket) => {
     console.log('Juge connecté');
 

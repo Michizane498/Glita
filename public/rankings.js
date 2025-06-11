@@ -1,7 +1,7 @@
 const socket = io();
 
-// Handle real-time updates
-socket.on('rankings-updated', (rankings) => {
+// Function to update the table with rankings data
+function updateRankingsTable(rankings) {
     const tableBody = document.getElementById('rankingsTable');
     tableBody.innerHTML = '';
     
@@ -21,4 +21,24 @@ socket.on('rankings-updated', (rankings) => {
         
         tableBody.appendChild(row);
     });
-}); 
+}
+
+// Fetch initial rankings data
+async function fetchInitialRankings() {
+    try {
+        const response = await fetch('/api/rankings');
+        if (!response.ok) {
+            throw new Error('Failed to fetch rankings');
+        }
+        const rankings = await response.json();
+        updateRankingsTable(rankings);
+    } catch (error) {
+        console.error('Error fetching rankings:', error);
+    }
+}
+
+// Fetch initial data when page loads
+document.addEventListener('DOMContentLoaded', fetchInitialRankings);
+
+// Handle real-time updates
+socket.on('rankings-updated', updateRankingsTable); 
