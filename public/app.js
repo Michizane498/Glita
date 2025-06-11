@@ -78,15 +78,21 @@ function updateCriteriaInputs() {
     judgeCriteria[judgeId].forEach(criterionId => {
         const div = document.createElement('div');
         div.className = 'criteria-group';
-        div.innerHTML = `
-            <label for="criterion-${criterionId}">${criteriaNames[criterionId]}</label>
-            <input type="number" 
-                   class="score-input" 
-                   id="criterion-${criterionId}" 
-                   min="1" 
-                   max="10" 
-                   required>
-        `;
+        
+        const label = document.createElement('label');
+        label.htmlFor = `criterion-${criterionId}`;
+        label.textContent = criteriaNames[criterionId];
+        
+        const input = document.createElement('input');
+        input.type = 'number';
+        input.className = 'score-input form-control';
+        input.id = `criterion-${criterionId}`;
+        input.min = '1';
+        input.max = '10';
+        input.required = true;
+        
+        div.appendChild(label);
+        div.appendChild(input);
         container.appendChild(div);
     });
 }
@@ -114,10 +120,14 @@ async function handleSubmit(e) {
         });
     }
     
-    // Reset form
-    e.target.reset();
+    // Clear form values
+    document.getElementById('individualId').value = '';
     document.getElementById('participantInfo').classList.add('d-none');
-    updateCriteriaInputs();
+    
+    // Clear all score inputs
+    document.querySelectorAll('.score-input').forEach(input => {
+        input.value = '';
+    });
     
     // Show success message
     alert('Notes soumises avec succès!');
